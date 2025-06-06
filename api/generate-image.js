@@ -65,54 +65,15 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const canvas = Canvas.createCanvas(1280, 576);
+    const canvas = Canvas.createCanvas(554, 554);
     const ctx = canvas.getContext('2d');
 
     const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
-    const imageUrl = image?.trim() || DEFAULT_IMAGE_URL;
-    const response = await fetch(imageUrl);
-    if (!response.ok) throw new Error('Gagal mengambil gambar dari URL.');
-    const buffer = await response.buffer();
-    const profileImage = await Canvas.loadImage(buffer);
-
-    const centerX = canvas.width / 2;
-    const centerY = 85;
-    const radius = 60;
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.drawImage(profileImage, centerX - radius, centerY - radius, radius * 2, radius * 2);
-    ctx.restore();
-
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = '#ffffff';
-    ctx.stroke();
-
     ctx.fillStyle = '#FFFFFF';
-    ctx.textAlign = 'center';
-    ctx.font = `bold 19px 'default'`;
-    ctx.fillText("____________________________________________", centerX, 160);
-
-    ctx.font = `bold 40px 'default'`;
-    ctx.fillText(welcome ? "WELCOME" : "GOODBYE", centerX, 210);
-
-    ctx.fillStyle = '#87CEEB';
-    ctx.font = `37px 'default'`;
-    ctx.fillText(name, centerX, 260);
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = `bold 37px 'sunshine'`;
-    ctx.fillText(welcome ? "I hope You enjoy it here" : "Bye, see You later", centerX, 320);
-
-    ctx.font = `10px 'roboto-black'`;
-    ctx.fillText(date, centerX, 380);
-    ctx.fillText(getCurrentTime(), centerX, 390);
+    ctx.font = `bold 37px 'default'`;
+    ctx.fillText(isi, centerX, 320);
 
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
