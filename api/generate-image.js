@@ -44,23 +44,26 @@ function isGloballyRateLimited() {
 Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.ttf'), { family: 'default' });
 
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
-  const words = text.split(' ');
   let line = '';
+  const lines = [];
 
-  for (let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
+  for (let i = 0; i < text.length; i++) {
+    const testLine = line + text[i];
     const metrics = context.measureText(testLine);
     const testWidth = metrics.width;
 
-    if (testWidth > maxWidth && n > 0) {
-      context.fillText(line, x, y);
-      line = words[n] + ' ';
-      y += lineHeight;
+    if (testWidth > maxWidth && line !== '') {
+      lines.push(line);
+      line = text[i];
     } else {
       line = testLine;
     }
   }
-  context.fillText(line, x, y);
+  if (line) lines.push(line);
+
+  for (let j = 0; j < lines.length; j++) {
+    context.fillText(lines[j], x, y + j * lineHeight);
+  }
 }
 
 module.exports = async (req, res) => {
@@ -87,7 +90,7 @@ module.exports = async (req, res) => {
   try {
     const canvas = Canvas.createCanvas(554, 554);
     const ctx = canvas.getContext('2d');
-    
+
     const centerX = canvas.width / 2;
 
     const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
