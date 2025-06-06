@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="title" content="Lemon Card Image">
+  <meta name="description" content="Lemon Image Generator adalah aplikasi web untuk membuat gambar sambutan otomatis (Welcome/Goodbye) dengan nama dan foto pengguna, cocok untuk bot, komunitas, atau personalisasi.">
+  <meta name="keywords" content="generate image, image generator, gambar welcome, goodbye generator, bot image generator, sambutan otomatis, gambar sambutan, bot WhatsApp, gambar otomatis, Lemon image tool, pembuat gambar HTML, Node.js image generator, gambar bot komunitas, banner welcome, profile welcome, pembuat gambar user, welcome image bot, bot welcome tool, gambar perpisahan otomatis, welcome goodbye app, bot design tools, profile image generator, generate image online, serverless image generator, welcome image web, express canvas image, HTML5 canvas generator, gambar sambutan komunitas, otomatisasi gambar, generate image API, open source image tool, bot image banner">
+  <meta name="author" content="Lemon">
+  <meta property="og:title" content="Lemon Card Image">
+  <meta property="og:description" content="Buat gambar sambutan otomatis hanya dengan nama dan URL gambar profil. Sempurna untuk bot dan komunitas online.">
+  <meta property="og:image" content="https://files.catbox.moe/mwurut.jpg">
+  <meta property="og:url" content="https://lemon-welcome.vercel.app">
+  <title>Card Image Maker</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="icon" href="https://files.catbox.moe/mwurut.jpg" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="container">
+    <h1>Card Image Maker</h1>
+    <form id="bookForm">
+      <label for="name">Nama Anda:</label>
+      <input type="text" id="name" name="name" placeholder="Nama Anda..." required/>
+
+      <label for="image">URL Gambar Profil:</label>
+      <input type="text" id="image" name="image" placeholder="https://..." />
+
+      <label for="welcome">Jenis Pesan:</label>
+      <select name="welcome" id="welcome">
+        <option value="true">Welcome</option>
+        <option value="false">Goodbye</option>
+      </select>
+
+      <button type="submit">Buat Gambar</button>
+    </form>
+
+    <section class="result-section">
+      <h2>Hasil:</h2>
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+      </div>
+      <img id="resultImage" src="" alt="Generated Image"/>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Dibuat oleh <a href="https://github.com/LemonSync" target="_blank">Lemon</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
