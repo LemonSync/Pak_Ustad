@@ -60,8 +60,8 @@ module.exports = async (req, res) => {
 
   const { isi } = req.body;
 
-  if (!name) {
-    return res.status(400).json({ message: 'Parameter "name" wajib diisi.' });
+  if (!isi) {
+    return res.status(400).json({ message: 'Parameter "isi" wajib diisi.' });
   }
 
   try {
