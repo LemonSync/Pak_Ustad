@@ -67,7 +67,8 @@ module.exports = async (req, res) => {
   try {
     const canvas = Canvas.createCanvas(554, 554);
     const ctx = canvas.getContext('2d');
-
+    
+    const centerX = canvas.width / 2;
     const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
