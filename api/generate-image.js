@@ -43,6 +43,26 @@ function isGloballyRateLimited() {
 
 Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.ttf'), { family: 'default' });
 
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = context.measureText(testLine);
+    const testWidth = metrics.width;
+
+    if (testWidth > maxWidth && n > 0) {
+      context.fillText(line, x, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  context.fillText(line, x, y);
+}
+
 module.exports = async (req, res) => {
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() || req.socket.remoteAddress;
 
@@ -69,12 +89,19 @@ module.exports = async (req, res) => {
     const ctx = canvas.getContext('2d');
     
     const centerX = canvas.width / 2;
+
     const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = '#000000';
     ctx.font = `bold 30px 'default'`;
-    ctx.fillText(isi, centerX + -210, 150);
+
+    const maxTextWidth = 400;
+    const startX = centerX - maxTextWidth / 2;
+    const startY = 150;
+    const lineHeight = 40;
+
+    wrapText(ctx, isi, startX, startY, maxTextWidth, lineHeight);
 
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
@@ -85,4 +112,3 @@ module.exports = async (req, res) => {
     res.status(500).send('Gagal memproses gambar.');
   }
 };
-  
