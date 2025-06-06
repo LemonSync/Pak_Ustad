@@ -41,7 +41,7 @@ function isGloballyRateLimited() {
   return false;
 }
 
-Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.otf'), { family: 'default' });
+Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.ttf'), { family: 'default' });
 
 module.exports = async (req, res) => {
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() || req.socket.remoteAddress;
