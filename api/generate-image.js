@@ -59,6 +59,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
       line = testLine;
     }
   }
+
   if (line) lines.push(line);
 
   for (let j = 0; j < lines.length; j++) {
@@ -85,6 +86,10 @@ module.exports = async (req, res) => {
 
   if (!isi) {
     return res.status(400).json({ message: 'Parameter "isi" wajib diisi.' });
+  }
+
+  if (isi.length > 68) {
+    return res.status(400).json({ message: 'Teks tidak boleh lebih dari 68 karakter.' });
   }
 
   try {
