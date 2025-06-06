@@ -71,7 +71,7 @@ module.exports = async (req, res) => {
     const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = '#000000';
     ctx.font = `bold 37px 'default'`;
     ctx.fillText(isi, centerX, 320);
 
