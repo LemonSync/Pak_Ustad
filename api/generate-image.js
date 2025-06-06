@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
     const startY = 130;
     const lineHeight = 35;
 
-    wrapText(ctx, isi, startX + 1, startY, maxTextWidth, lineHeight);
+    wrapText(ctx, isi, startX, startY, maxTextWidth, lineHeight);
 
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
