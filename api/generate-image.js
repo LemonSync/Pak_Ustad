@@ -41,32 +41,7 @@ function isGloballyRateLimited() {
   return false;
 }
 
-
-let d = new Date();
-let date = d.toLocaleDateString('id', { day: 'numeric', month: 'long', year: 'numeric' });
-
-function getCurrentTime() {
-  const date = new Date();
-  const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const wibDate = new Date(utc + (3600000 * 7));
-  let hours = wibDate.getHours();
-  const minutes = ('00' + wibDate.getMinutes()).slice(-2);
-  let suffix;
-
-  if (hours > 12) { hours -= 12; suffix = 'PM'; }
-  else if (hours === 0) { hours = 12; suffix = 'AM'; }
-  else if (hours === 12) { suffix = 'PM'; }
-  else { suffix = 'AM'; }
-
-  return `${hours}:${minutes} ${suffix}`;
-}
-
 Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.otf'), { family: 'default' });
-Canvas.registerFont(path.join(__dirname, '../media/fonts/Roboto-Black.ttf'), { family: 'roboto-black' });
-Canvas.registerFont(path.join(__dirname, '../media/fonts/Roboto-Light.ttf'), { family: 'roboto' });
-Canvas.registerFont(path.join(__dirname, '../media/fonts/Alittlesunshine.ttf'), { family: 'sunshine' });
-
-const DEFAULT_IMAGE_URL = 'https://files.catbox.moe/y1tr8q.jpg';
 
 module.exports = async (req, res) => {
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() || req.socket.remoteAddress;
@@ -83,7 +58,7 @@ module.exports = async (req, res) => {
     });
   }
 
-  const { name, image, welcome } = req.body;
+  const { isi } = req.body;
 
   if (!name) {
     return res.status(400).json({ message: 'Parameter "name" wajib diisi.' });
@@ -93,7 +68,7 @@ module.exports = async (req, res) => {
     const canvas = Canvas.createCanvas(1280, 576);
     const ctx = canvas.getContext('2d');
 
-    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/welcome_template.jpg'));
+    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
     const imageUrl = image?.trim() || DEFAULT_IMAGE_URL;
