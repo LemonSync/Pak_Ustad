@@ -74,7 +74,7 @@ module.exports = async (req, res) => {
 
     ctx.fillStyle = '#000000';
     ctx.font = `bold 37px 'default'`;
-    ctx.fillText(isi, centerX, 320);
+    ctx.fillText(isi, centerX, 400);
 
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
