@@ -43,27 +43,45 @@ function isGloballyRateLimited() {
 
 Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.ttf'), { family: 'default' });
 
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
   let line = '';
-  const lines = [];
 
-  for (let i = 0; i < text.length; i++) {
-    const testLine = line + text[i];
-    const metrics = context.measureText(testLine);
-    const testWidth = metrics.width;
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    const testLine = line + (line ? ' ' : '') + word;
+    const testWidth = ctx.measureText(testLine).width;
 
-    if (testWidth > maxWidth && line !== '') {
-      lines.push(line);
-      line = text[i];
-    } else {
+    if (testWidth <= maxWidth) {
       line = testLine;
+    } else {
+      if (line) {
+        ctx.fillText(line, x, y);
+        y += lineHeight;
+        line = word;
+      } else {
+        let subLine = '';
+        for (let char of word) {
+          const testSubLine = subLine + char;
+          if (ctx.measureText(testSubLine).width > maxWidth) {
+            ctx.fillText(subLine, x, y);
+            y += lineHeight;
+            subLine = char;
+          } else {
+            subLine = testSubLine;
+          }
+        }
+        if (subLine) {
+          ctx.fillText(subLine, x, y);
+          y += lineHeight;
+        }
+        line = '';
+      }
     }
   }
 
-  if (line) lines.push(line);
-
-  for (let j = 0; j < lines.length; j++) {
-    context.fillText(lines[j], x, y + j * lineHeight);
+  if (line) {
+    ctx.fillText(line, x, y);
   }
 }
 
