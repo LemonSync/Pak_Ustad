@@ -43,8 +43,9 @@ function isGloballyRateLimited() {
 
 Canvas.registerFont(path.join(__dirname, '../media/fonts/Lemon.ttf'), { family: 'default' });
 
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+function wrapText(ctx, text, centerX, startY, maxWidth, lineHeight) {
   const words = text.split(' ');
+  const lines = [];
   let line = '';
 
   for (let i = 0; i < words.length; i++) {
@@ -56,32 +57,33 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
       line = testLine;
     } else {
       if (line) {
-        ctx.fillText(line, x, y);
-        y += lineHeight;
+        lines.push(line);
         line = word;
       } else {
         let subLine = '';
-        for (let char of word) {
-          const testSubLine = subLine + char;
-          if (ctx.measureText(testSubLine).width > maxWidth) {
-            ctx.fillText(subLine, x, y);
-            y += lineHeight;
+        for (const char of word) {
+          const testSub = subLine + char;
+          if (ctx.measureText(testSub).width > maxWidth) {
+            lines.push(subLine);
             subLine = char;
           } else {
-            subLine = testSubLine;
+            subLine = testSub;
           }
         }
-        if (subLine) {
-          ctx.fillText(subLine, x, y);
-          y += lineHeight;
-        }
+        if (subLine) lines.push(subLine);
         line = '';
       }
     }
   }
 
-  if (line) {
-    ctx.fillText(line, x, y);
+  if (line) lines.push(line);
+
+  for (let i = 0; i < lines.length; i++) {
+    const textLine = lines[i];
+    const lineWidth = ctx.measureText(textLine).width;
+    const x = centerX - lineWidth / 2;
+    const y = startY + i * lineHeight;
+    ctx.fillText(textLine, x, y);
   }
 }
 
@@ -123,11 +125,10 @@ module.exports = async (req, res) => {
     ctx.font = `bold 30px 'default'`;
 
     const maxTextWidth = 405;
-    const startX = centerX - maxTextWidth / 2;
     const startY = 130;
     const lineHeight = 35;
 
-    wrapText(ctx, isi, startX, startY, maxTextWidth, lineHeight);
+    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
 
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
