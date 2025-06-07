@@ -12,22 +12,28 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
   try {
     const response = await fetch('/api/generate-image', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ isi })
     });
 
-    if (!response.ok) throw new Error('Gagal menghasilkan gambar: ' + response);
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error('Gagal menghasilkan gambar: ' + errText);
+    }
 
     const blob = await response.blob();
     const imageUrl = URL.createObjectURL(blob);
 
     resultImage.src = imageUrl;
+
     resultImage.onload = () => {
       loading.style.display = 'none';
       resultImage.style.display = 'block';
     };
   } catch (err) {
-    alert('Terjadi kesalahan saat menghasilkan gambar.\n' + err);
+    alert('Terjadi kesalahan saat menghasilkan gambar.\n' + err.message);
     loading.style.display = 'none';
   }
 });
