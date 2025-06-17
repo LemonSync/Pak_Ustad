@@ -136,7 +136,7 @@ module.exports = async (req, res) => {
     res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
     res.send(output);
     } else if (option === "type2") {
-      const canvas = Canvas.createCanvas(554, 554);
+      const canvas = Canvas.createCanvas(720, 1065);
     const ctx = canvas.getContext('2d');
 
     const centerX = canvas.width / 2;
