@@ -20,7 +20,7 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
     });
 
     if (!response.ok) {
-      const errText = await response.text();
+      const errText = await response.json();
       throw new Error('Gagal menghasilkan gambar: ' + errText);
     }
 
