@@ -149,7 +149,7 @@ module.exports = async (req, res) => {
 
     const maxTextWidth = 500;
     const startY = 220;
-    const lineHeight = 35;
+    const lineHeight = 45;
 
     wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
 
