@@ -147,7 +147,7 @@ module.exports = async (req, res) => {
     ctx.fillStyle = '#000000';
     ctx.font = `bold 40px 'default'`;
 
-    const maxTextWidth = 405;
+    const maxTextWidth = 420;
     const startY = 200;
     const lineHeight = 35;
 
