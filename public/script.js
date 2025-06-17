@@ -1,32 +1,14 @@
 document.getElementById('bookForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const isiInput = document.getElementById('isi');
-  const optionInput = document.getElementById('option');
+  const isi = document.getElementById('isi').value;
+  const option = document.getElementById('option').value;
+
   const loading = document.getElementById('loading');
   const resultImage = document.getElementById('resultImage');
-  const submitBtn = document.querySelector('#bookForm button[type="submit"]');
-
-  const isi = isiInput.value.trim();
-  const option = optionInput.value;
 
   loading.style.display = 'flex';
   resultImage.style.display = 'none';
-  submitBtn.disabled = true;
-
-  if (!isi) {
-    alert('Teks tidak boleh kosong.');
-    loading.style.display = 'none';
-    submitBtn.disabled = false;
-    return;
-  }
-
-  if (isi.length > 68) {
-    alert('Teks tidak boleh lebih dari 68 karakter.');
-    loading.style.display = 'none';
-    submitBtn.disabled = false;
-    return;
-  }
 
   try {
     const response = await fetch('/api/generate-image', {
@@ -38,15 +20,8 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
     });
 
     if (!response.ok) {
-      let errorMsg = 'Gagal menghasilkan gambar.';
-      try {
-        const errJson = await response.json();
-        errorMsg = errJson.message || errorMsg;
-      } catch {
-        const errText = await response.text();
-        errorMsg += '\n' + errText;
-      }
-      throw new Error(errorMsg);
+      const errText = await response.text();
+      throw new Error('Gagal menghasilkan gambar: ' + errText);
     }
 
     const blob = await response.blob();
@@ -61,7 +36,5 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
   } catch (err) {
     alert('Terjadi kesalahan saat menghasilkan gambar.\n' + err.message);
     loading.style.display = 'none';
-  } finally {
-    submitBtn.disabled = false;
   }
 });
