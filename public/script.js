@@ -21,7 +21,7 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
 
     if (!response.ok) {
       const errText = await response.json();
-      throw new Error('Gagal menghasilkan gambar: ' + errText);
+      throw new Error('Gagal menghasilkan gambar: ' + errText.message);
     }
 
     const blob = await response.blob();
