@@ -1,24 +1,30 @@
 document.getElementById('bookForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const isi = document.getElementById('isi').value.trim();
-  const option = document.getElementById('option').value;
-
+  const isiInput = document.getElementById('isi');
+  const optionInput = document.getElementById('option');
   const loading = document.getElementById('loading');
   const resultImage = document.getElementById('resultImage');
+  const submitBtn = document.querySelector('#bookForm button[type="submit"]');
+
+  const isi = isiInput.value.trim();
+  const option = optionInput.value;
 
   loading.style.display = 'flex';
   resultImage.style.display = 'none';
+  submitBtn.disabled = true;
 
   if (!isi) {
     alert('Teks tidak boleh kosong.');
     loading.style.display = 'none';
+    submitBtn.disabled = false;
     return;
   }
 
   if (isi.length > 68) {
     alert('Teks tidak boleh lebih dari 68 karakter.');
     loading.style.display = 'none';
+    submitBtn.disabled = false;
     return;
   }
 
@@ -45,6 +51,7 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
 
     const blob = await response.blob();
     const imageUrl = URL.createObjectURL(blob);
+
     resultImage.src = imageUrl;
 
     resultImage.onload = () => {
@@ -54,5 +61,7 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
   } catch (err) {
     alert('Terjadi kesalahan saat menghasilkan gambar.\n' + err.message);
     loading.style.display = 'none';
+  } finally {
+    submitBtn.disabled = false;
   }
 });
