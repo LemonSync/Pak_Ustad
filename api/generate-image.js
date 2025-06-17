@@ -145,10 +145,10 @@ module.exports = async (req, res) => {
     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = '#000000';
-    ctx.font = `bold 30px 'default'`;
+    ctx.font = `bold 40px 'default'`;
 
     const maxTextWidth = 405;
-    const startY = 120;
+    const startY = 200;
     const lineHeight = 35;
 
     wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
