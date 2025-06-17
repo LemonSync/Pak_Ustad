@@ -148,7 +148,7 @@ module.exports = async (req, res) => {
     ctx.font = `bold 40px 'default'`;
 
     const maxTextWidth = 420;
-    const startY = 200;
+    const startY = 210;
     const lineHeight = 35;
 
     wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
@@ -157,8 +157,28 @@ module.exports = async (req, res) => {
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
     res.send(output);
-    } else {
-    return res.status(400).json({ error: 'Type tidak valid / tersedia'})
+    } else { // untuk else
+    const canvas = Canvas.createCanvas(554, 554);
+    const ctx = canvas.getContext('2d');
+
+    const centerX = canvas.width / 2;
+
+    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
+    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#000000';
+    ctx.font = `bold 30px 'default'`;
+
+    const maxTextWidth = 405;
+    const startY = 120;
+    const lineHeight = 35;
+
+    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
+
+    const output = canvas.toBuffer('image/png');
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
+    res.send(output);
     }
   } catch (err) {
     console.error('Error generate-image:', err);
