@@ -30,6 +30,12 @@
       margin-bottom: 2em;
     }
 
+    #clock {
+      width: 26em;
+      color: #555;
+      margin-bottom: 2em;
+    }
+
     .logo {
       width: 180px;
       height: auto;
@@ -50,9 +56,21 @@
   <h2>🛑 Maintenance Process<h2>
   <p>Kami sedang melakukan pembaruan sistem atau sedang menonaktifkan website ini sementara untuk menghindari serangan DDOS</p>
   <p>Harap kembali setelah beberapa saat</p>
+   <div id="clock">00:00:00</div>
 
   <script>
-    console.log("Halaman maintenance ditampilkan.");
+    console.log("Server sedang dalam proses Maintenance .");
+    function updateClock() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const currentTime = `${hours}:${minutes}:${seconds}`;
+  
+  document.getElementById('clock').textContent = currentTime;
+}
+setInterval(updateClock, 1000);
+updateClock();
   </script>
 
 </body>
