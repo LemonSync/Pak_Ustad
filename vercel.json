@@ -11,7 +11,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/public/maintenance.html"
+      "dest": "/public/$1"
     }
   ]
 }
