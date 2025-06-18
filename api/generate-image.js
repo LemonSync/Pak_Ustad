@@ -2,6 +2,8 @@ const fetch = require('node-fetch');
 const Canvas = require('canvas');
 const path = require('path');
 
+const IS_MAINTENANCE = true;
+
 const ipCache = new Map();
 const RATE_LIMIT = 6;
 const TIME_WINDOW = 1 * 60 * 1000;
@@ -88,6 +90,12 @@ function wrapText(ctx, text, centerX, startY, maxWidth, lineHeight) {
 }
 
 module.exports = async (req, res) => {
+  if (IS_MAINTENANCE) {
+    return res.status(503).json({
+      message: "Server sedang dalam proses maintenance, Harap coba lagi beberapa saat."
+    });
+  }
+
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() || req.socket.remoteAddress;
 
   if (isGloballyRateLimited()) {
@@ -113,75 +121,51 @@ module.exports = async (req, res) => {
   }
 
   try {
+    let canvas, ctx, centerX, bg, maxTextWidth, startY, lineHeight;
+
     if (option === "type1") {
-      const canvas = Canvas.createCanvas(554, 554);
-    const ctx = canvas.getContext('2d');
-
-    const centerX = canvas.width / 2;
-
-    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
-    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#000000';
-    ctx.font = `bold 30px 'default'`;
-
-    const maxTextWidth = 405;
-    const startY = 120;
-    const lineHeight = 35;
-
-    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
-
-    const output = canvas.toBuffer('image/png');
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
-    res.send(output);
+      canvas = Canvas.createCanvas(554, 554);
+      ctx = canvas.getContext('2d');
+      centerX = canvas.width / 2;
+      bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
+      ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#000000';
+      ctx.font = `bold 30px 'default'`;
+      maxTextWidth = 405;
+      startY = 120;
+      lineHeight = 35;
     } else if (option === "type2") {
-      const canvas = Canvas.createCanvas(720, 1065);
-    const ctx = canvas.getContext('2d');
-
-    const centerX = canvas.width / 2;
-
-    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad2.jpg'));
-    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#000000';
-    ctx.font = `bold 40px 'default'`;
-
-    const maxTextWidth = 500;
-    const startY = 220;
-    const lineHeight = 45;
-
-    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
-
-    const output = canvas.toBuffer('image/png');
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
-    res.send(output);
-    } else { // untuk else
-    const canvas = Canvas.createCanvas(554, 554);
-    const ctx = canvas.getContext('2d');
-
-    const centerX = canvas.width / 2;
-
-    const bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
-    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#000000';
-    ctx.font = `bold 30px 'default'`;
-
-    const maxTextWidth = 405;
-    const startY = 120;
-    const lineHeight = 35;
-
-    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
-
-    const output = canvas.toBuffer('image/png');
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
-    res.send(output);
+      canvas = Canvas.createCanvas(720, 1065);
+      ctx = canvas.getContext('2d');
+      centerX = canvas.width / 2;
+      bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad2.jpg'));
+      ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#000000';
+      ctx.font = `bold 40px 'default'`;
+      maxTextWidth = 500;
+      startY = 220;
+      lineHeight = 45;
+    } else {
+      canvas = Canvas.createCanvas(554, 554);
+      ctx = canvas.getContext('2d');
+      centerX = canvas.width / 2;
+      bg = await Canvas.loadImage(path.join(__dirname, '../media/image/pak_ustad.jpg'));
+      ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#000000';
+      ctx.font = `bold 30px 'default'`;
+      maxTextWidth = 405;
+      startY = 120;
+      lineHeight = 35;
     }
+
+    wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
+
+    const output = canvas.toBuffer('image/png');
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
+    res.send(output);
   } catch (err) {
     console.error('Error generate-image:', err);
-    res.status(500).send('Gagal memproses gambar.');
+    res.status(500).json({ message: 'Gagal memproses gambar.' });
   }
 };
