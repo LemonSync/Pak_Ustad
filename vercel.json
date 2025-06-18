@@ -7,7 +7,7 @@
   "routes": [
     {
       "src": "/api/generate-image",
-      "dest": "/public/maintenance.html"
+      "dest": "/api/generate-image.js"
     },
     {
       "src": "/(.*)",
