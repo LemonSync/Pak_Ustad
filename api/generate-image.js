@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const Canvas = require('canvas');
 const path = require('path');
 
-const IS_MAINTENANCE = false;
+const IS_MAINTENANCE = true;
 
 const ipCache = new Map();
 const RATE_LIMIT = 6;
