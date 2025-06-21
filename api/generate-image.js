@@ -164,15 +164,6 @@ module.exports = async (req, res) => {
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
     res.send(output);
-    await fetch("https://lemon-systemweb.vercel.app/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ip,
-        host,
-        data: { isi, option }
-      })
-    }).catch(console.error);
   } catch (err) {
     console.error('Error generate-image:', err);
     res.status(500).json({ message: 'Gagal memproses gambar.' });
