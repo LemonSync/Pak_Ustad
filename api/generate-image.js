@@ -1,3 +1,4 @@
+const { SpeedInsights } = require('@vercel/speed-insights/next');
 const fetch = require('node-fetch');
 const Canvas = require('canvas');
 const path = require('path');
