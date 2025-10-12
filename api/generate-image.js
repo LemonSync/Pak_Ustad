@@ -33,8 +33,7 @@ function isGloballyRateLimited() {
   const now = Date.now();
   if (now - globalStartTime > GLOBAL_TIME_WINDOW) {
     globalStartTime = now;
-    globalRequestCount = 1;
-    return false;
+    globalRequestCount = 0;
   }
 
   if (globalRequestCount >= GLOBAL_RATE_LIMIT) return true;
@@ -50,8 +49,7 @@ function wrapText(ctx, text, centerX, startY, maxWidth, lineHeight) {
   const lines = [];
   let line = '';
 
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
+  for (const word of words) {
     const testLine = line + (line ? ' ' : '') + word;
     const testWidth = ctx.measureText(testLine).width;
 
@@ -96,7 +94,11 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() || req.socket.remoteAddress;
+  const ip =
+    req.headers['x-real-ip'] ||
+    (req.headers['x-forwarded-for'] || '').split(',')[0]?.trim() ||
+    req.socket.remoteAddress ||
+    'unknown';
 
   if (isGloballyRateLimited()) {
     return res.status(503).json({
@@ -134,6 +136,7 @@ module.exports = async (req, res) => {
       maxTextWidth = 405;
       startY = 120;
       lineHeight = 35;
+
     } else if (option === "type2") {
       canvas = Canvas.createCanvas(720, 1065);
       ctx = canvas.getContext('2d');
@@ -145,6 +148,7 @@ module.exports = async (req, res) => {
       maxTextWidth = 500;
       startY = 220;
       lineHeight = 45;
+
     } else {
       canvas = Canvas.createCanvas(554, 554);
       ctx = canvas.getContext('2d');
