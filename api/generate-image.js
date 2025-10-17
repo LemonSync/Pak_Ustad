@@ -112,7 +112,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const { isi, option } = req.body;
+  const isi = req.query.isi || req.body.isi;
+  const option = req.query.option || req.body.option;
+
 
   if (!isi) {
     return res.status(400).json({ message: 'Parameter "isi" wajib diisi.' });
